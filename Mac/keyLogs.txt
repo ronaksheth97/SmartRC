@@ -1,1 +1,0 @@
-NSEvent: type=KeyDown loc=(829.039,459.52) time=238363.9 flags=0x40101 win=0x0 winNum=0 ctxt=0x0 chars="" unmodchars="c" repeat=0 keyCode=8

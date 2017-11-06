@@ -2,7 +2,7 @@
 # Citation: Box Of Hats (https://github.com/Box-Of-Hats )
 
 def get_event():
-    with open('keyLogs.txt') as file:
+    with open('key.log') as file:
         event = file.read()
     return event
 

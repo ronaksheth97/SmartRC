@@ -50,7 +50,7 @@ def handler(event):
         AppHelper.stopEventLoop()
 
 def writeToFile(eventLogged):
-    with open("/Users/RonakSheth/Downloads/pygta5-master/keyLogs.txt", "w", 0) as myfile:
+    with open("key.log", "w", 0) as myfile:
         myfile.write(eventLogged)
 
 def main():
