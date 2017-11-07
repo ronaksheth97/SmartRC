@@ -1,7 +1,7 @@
 char val; // Data received from the serial port
 
-int FORWARDSPEED = 200;
-int TURNSPEED = 255;
+int FORWARDSPEED = 150;
+int TURNSPEED = 150;
 char previousVal;
 
 void setup() {
@@ -65,7 +65,9 @@ void forward() {
    if(val != 'a' || val != 'd'){
     digitalWrite(8, HIGH); // Direction changes to center
    }
-   analogWrite(3, FORWARDSPEED);  // Spins the motor on Channel A at full speed 
+   analogWrite(3, 255);  // Spins the motor on Channel A at full speed 
+   delay(250);
+   analogWrite(3, 50);
 }
 
 // Car drives forward and left
@@ -75,7 +77,7 @@ void left(){
   digitalWrite(13, HIGH);  //
   digitalWrite(8, LOW);
   analogWrite(11, TURNSPEED);
-  // forward();
+  //forward();
 }
 
 // Car drives forward and right
@@ -85,7 +87,7 @@ void right(){
   digitalWrite(13, LOW);
   digitalWrite(8, LOW);
   analogWrite(11, TURNSPEED);
-  // forward();
+  //forward();
 }
 
 // Car drives reverse

@@ -6,7 +6,7 @@ def get_event():
         event = file.read()
     return event
 
-def parse_event(event):
+def event_to_key(event):
     keyIndex = event.index("char") + 7
     key = event[keyIndex]
     return key
@@ -15,5 +15,7 @@ def key_check():
     event = get_event()
     key = parse_event(event)
     return key
- 
-key_check()
+
+
+if __name__ == '__main__':
+    key_check()

