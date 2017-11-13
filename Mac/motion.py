@@ -1,4 +1,6 @@
 '''
+Taken from https://github.com/Sentdex/pygta5
+
 This is a heavily cut and slightly modified version of code I found:
 http://www.noah.org/wiki/movement.py  (version 3), which
 has a license here:

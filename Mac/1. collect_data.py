@@ -1,3 +1,8 @@
+# Adapted from https://github.com/Sentdex/pygta5
+# Changed the method of tracking keypresses (for OSX instead of Windows)
+# Changed the method of capturing screen (for OSX instead of Windows)
+
+
 import numpy as np
 from grabscreen import grab_screen
 import cv2

@@ -1,3 +1,5 @@
+# Adapted from https://github.com/Sentdex/pygta5
+
 import numpy as np
 from grabscreen import grab_screen
 import cv2
