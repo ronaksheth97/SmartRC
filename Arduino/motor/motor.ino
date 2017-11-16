@@ -1,11 +1,10 @@
-char val; // Data received from the serial port
 
-int FORWARDSPEED = 150;
+int FORWARDSPEED = 200;
 int TURNSPEED = 150;
-char previousVal;
+int command = 0; //Data received from the serial port. Initial Command
 
 void setup() {
-  Serial.begin(9600); // Start serial communication at 9600bps
+  Serial.begin(115200); // Start serial communication at 115200bps
   establishContact();  // send a byte to establish contact until receiver responds
 
   // Drive motors
@@ -25,24 +24,12 @@ void setup() {
 
 void loop() {
   if (Serial.available()) { // If data is available to read
-    previousVal = val;
-    val = Serial.read();
+    command = Serial.read();
   }
-
-    switch (val) {
-        case 'w':            forward();  //"w"   
-                            break;
-        case 'a':            left();   // "a"
-                            break;
-        case 's':            reverse();  // "s"   
-                            break;
-        case 'd':            right();   // "d"
-                            break;
-        case 'x':            stop();   // "x"
-                            break;
-    //Serial.print(inByte);
+  else{
+    reset();
   }
-  delay(10);
+  send_command(command, time);
 }
 
 void establishContact() {
@@ -53,63 +40,85 @@ void establishContact() {
 }
 
 // Car drives forward
-void forward() {
-  if(previousVal == 'w'){
-    return;
-  }
-  else if(previousVal == 's'){
-    digitalWrite(9,HIGH); // Car stops moving to go from moving backwards to forwards
-  }
+void forward(int time) {
    digitalWrite(12, LOW); // Establishes forward direction of Channel A
-   digitalWrite(9, LOW);   // Disengage the Brake for Channel A
-   if(val != 'a' || val != 'd'){
-    digitalWrite(8, HIGH); // Direction changes to center
-   }
-   analogWrite(3, 255);  // Spins the motor on Channel A at full speed 
-   delay(250);
-   analogWrite(3, 50);
+   analogWrite(3, FORWARDSPEED);  // Spins the motor on Channel A at full speed 
+   delay(time);
 }
 
-// Car drives forward and left
-void left(){
+// Car turns left
+void left(int time){
   // Direction change (left)
-  digitalWrite(8, HIGH);
   digitalWrite(13, HIGH);  //
-  digitalWrite(8, LOW);
   analogWrite(11, TURNSPEED);
-  //forward();
+  delay(time);
 }
 
-// Car drives forward and right
-void right(){
+// Car turns right
+void right(int time){
   // Direction change (right)
-  digitalWrite(8, HIGH);
   digitalWrite(13, LOW);
-  digitalWrite(8, LOW);
   analogWrite(11, TURNSPEED);
-  //forward();
+  delay(time);
 }
 
 // Car drives reverse
-void reverse(){
-  if(previousVal == 's'){
-    return;
-  }
-  else if(previousVal == 'w'){
-    digitalWrite(9,HIGH); // Car stops moving to go from moving backwards to forwards
-  }
-   digitalWrite(12, HIGH); // Establishes forward direction of Channel A
-   digitalWrite(9, LOW);   // Disengage the Brake for Channel A
-   if(val != 'a' || val != 'd'){
-    digitalWrite(8, HIGH); // Direction changes to center
-   }
+void reverse(int time){
+   digitalWrite(12, HIGH); // Establishes reverse direction of Channel A
    analogWrite(3, FORWARDSPEED);  // Spins the motor on Channel A at full speed 
 }
 
-// Car stops
-void stop(){
-  digitalWrite(9, HIGH);  // car stops moving
-  digitalWrite(8, HIGH);  // tires go back to a neutral position
-  analogWrite(3, 0);
-  analogWrite(11, 0);
+// Car drives forward and right
+void forward_right(int time){
+  digitalWrite(12, LOW);
+  digitalWrite(13, LOW);
+  analogWrite(3, FORWARDSPEED);
+  delay(time);
+}
+
+// Car drives forward and left
+void forward_left(int time){
+  digitalWrite(12, LOW);
+  digitalWrite(13, HIGH);
+  analogWrite(3, FORWARDSPEED);
+  delay(time);
+}
+
+// Car drives reverse and left
+void reverse_left(int time){
+  digitalWrite(12, HIGH);
+  digitalWrite(13, HIGH);
+  analogWrite(3, FORWARDSPEED);
+  delay(time);
+}
+
+// Car drives reverse and right
+void reverse_right(time){
+  digitalWrite(12, HIGH);
+  digitalWrite(13, LOW);
+  analogWrite(3, FORWARDSPEED);
+  delay(time);
+}
+
+
+void send_command(int command, int time){
+  switch (command){
+
+     //reset command
+     case 0: reset(); break;
+
+     // single command
+     case 1: forward(time); break;
+     case 2: reverse(time); break;
+     case 3: right(time); break;
+     case 4: left(time); break;
+
+     //combination command
+     case 6: forward_right(time); break;
+     case 7: forward_left(time); break;
+     case 8: reverse_right(time); break;
+     case 9: reverse_left(time); break;
+
+     default: Serial.print("Inalid Command\n");
+    }
 }
