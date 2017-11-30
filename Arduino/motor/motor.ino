@@ -1,7 +1,7 @@
 
 int FORWARDSPEED = 200;
 int TURNSPEED = 150;
-int command = 0; //Data received from the serial port. Initial Command
+String command = "d"; //Data received from the serial port. Initial Command
 
 void setup() {
   Serial.begin(115200); // Start serial communication at 115200bps
@@ -100,24 +100,31 @@ void reverse_right(time){
   delay(time);
 }
 
+void reset(){
+  digitalWrite(12, HIGH);
+  digitalWrite(13, HIGH);
+  digitalWrite(8, HIGH);
+  digitalWrite(9, HIGH);
+}
 
-void send_command(int command, int time){
+
+void send_command(String command, int time){
   switch (command){
 
      //reset command
-     case 0: reset(); break;
+     case "0": reset(); break;
 
      // single command
-     case 1: forward(time); break;
-     case 2: reverse(time); break;
-     case 3: right(time); break;
-     case 4: left(time); break;
+     case "f": forward(time); break;
+     case "b": reverse(time); break;
+     case "r": right(time); break;
+     case "l": left(time); break;
 
      //combination command
-     case 6: forward_right(time); break;
-     case 7: forward_left(time); break;
-     case 8: reverse_right(time); break;
-     case 9: reverse_left(time); break;
+     case "fr": forward_right(time); break;
+     case "fl": forward_left(time); break;
+     case "br": reverse_right(time); break;
+     case "rl": reverse_left(time); break;
 
      default: Serial.print("Inalid Command\n");
     }
