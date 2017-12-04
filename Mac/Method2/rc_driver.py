@@ -10,12 +10,12 @@ import math
 class NeuralNetwork(object):
 
     def __init__(self):
-        self.model = cv2.ANN_MLP()
+        self.model = cv2.ml.ANN_MLP_create()
 
     def create(self):
         layer_size = np.int32([38400, 32, 4])
-        self.model.create(layer_size)
-        self.model.load('mlp_xml/mlp.xml')
+        self.model.setLayerSizes(layer_size)
+        self.model = cv2.ml.ANN_MLP_load('mlp_xml/mlp.xml')
 
     def predict(self, samples):
         ret, resp = self.model.predict(samples)
@@ -29,19 +29,19 @@ class RCControl(object):
 
     def steer(self, prediction):
         if prediction == 2:
-            self.serial_port.write(chr(1))
+            self.serial_port.write('w')
             print("Forward")
         elif prediction == 0:
-            self.serial_port.write(chr(7))
+            self.serial_port.write('q')
             print("Left")
         elif prediction == 1:
-            self.serial_port.write(chr(6))
+            self.serial_port.write('e')
             print("Right")
         else:
             self.stop()
 
     def stop(self):
-        self.serial_port.write(chr(0))
+        self.serial_port.write('x')
 
 
 class DistanceToCamera(object):
@@ -82,7 +82,7 @@ class ObjectDetection(object):
             scaleFactor=1.1,
             minNeighbors=5,
             minSize=(30, 30),
-            flags=cv2.cv.CV_HAAR_SCALE_IMAGE
+            flags=cv2.cv2.CASCADE_SCALE_IMAGE
         )
 
         # draw a rectangle around the objects

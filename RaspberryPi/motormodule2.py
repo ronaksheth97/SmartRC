@@ -1,16 +1,12 @@
-import os
-import pygame
-from pygame.locals import *
 import serial
 import socket
 
 
 def main():
 
-    pygame.init()
-
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server_socket.bind(('192.168.43.53', 7001))
+#    server_socket.bind(('192.168.43.53', 7001))
+    server_socket.bind(('192.168.10.201', 7001))
     server_socket.listen(0)
 
     # accept a single connection
@@ -23,7 +19,6 @@ def main():
 
     send_inst = True
 
-    clock = pygame.time.Clock()
     while send_inst:
         try:
             key_input = connection.recv(128)

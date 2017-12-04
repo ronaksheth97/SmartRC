@@ -2,7 +2,7 @@
 """
 Reference:
 OpenCV-Python Tutorials - Camera Calibration and 3D Reconstruction
-http://opencv-python-tutroals.readthedocs.org/en/latest/py_tutorials/py_calib3d/py_calibration/py_calibration.html
+http://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_calib3d/py_calibration/py_calibration.html
 """
 
 import cv2

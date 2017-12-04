@@ -16,7 +16,8 @@ class CollectTrainingData(object):
     def __init__(self):
 
         self.server_socket = socket.socket()
-        self.server_socket.bind(('192.168.43.253', 8000))
+#        self.server_socket.bind(('192.168.43.253', 8000))
+        self.server_socket.bind(('192.168.10.201', 8000))
         self.server_socket.listen(0)
 
         # accept a single connection
@@ -37,7 +38,10 @@ class CollectTrainingData(object):
 
         # connect to RaspberryPi Socket Server
         client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        client_socket.connect(('192.168.43.53', 7001))
+#        client_socket.connect(('192.168.43.53', 7001))
+        client_socket.connect(('192.168.10.225', 7001))
+        # Disable the Nagle algorithm which may delay the transmission of data 
+        client_socket.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
 
         saved_frame = 0
         total_frame = 0
